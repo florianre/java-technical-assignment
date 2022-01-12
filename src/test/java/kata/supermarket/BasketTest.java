@@ -1,7 +1,7 @@
 package kata.supermarket;
 
 import kata.supermarket.checkout.Basket;
-import kata.supermarket.discount.UnitDiscountRule;
+import kata.supermarket.discount.DiscountRule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -21,7 +21,7 @@ class BasketTest {
     @DisplayName("basket provides its total value when containing...")
     @MethodSource
     @ParameterizedTest(name = "{0}")
-    void basketProvidesTotalValue(String description, String expectedTotal, Iterable<Item> items, Map<String, UnitDiscountRule> discounts) {
+    void basketProvidesTotalValue(String description, String expectedTotal, Iterable<Item> items, Map<String, DiscountRule> discounts) {
         final Basket basket = new Basket();
         items.forEach(basket::add);
         discounts.forEach((id, discount) -> basket.addDiscount(id, discount));
@@ -40,8 +40,8 @@ class BasketTest {
     }
 
     private static Arguments twoOfTheSameItemForThePriceOfOne() {
-        Map<String, UnitDiscountRule> discounts = new HashMap<>();
-        discounts.put(DIGESTIVES, new UnitDiscountRule(2, BigDecimal.valueOf(1.55)));
+        Map<String, DiscountRule> discounts = new HashMap<>();
+        discounts.put(DIGESTIVES, new DiscountRule(2, BigDecimal.valueOf(1.55)));
         return Arguments.of("two of the same item for the price of one", "1.55",
             Arrays.asList(aPackOfDigestives(), aPackOfDigestives()), discounts);
     }

@@ -1,18 +1,15 @@
 package kata.supermarket.discount;
 
-import kata.supermarket.Item;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.List;
 
-public class UnitDiscountRule {
+public class DiscountRule {
 
-  private long discountFor;
+  private double discountFor;
   private BigDecimal discountedPrice;
 
-  public BigDecimal getDiscountedPrice(int count) {
-    if (count < discountFor){
+  public BigDecimal getDiscountedPrice(double count) {
+    if (count < discountFor) {
       return BigDecimal.ZERO;
     } else {
       return BigDecimal.valueOf(count / discountFor)
@@ -20,7 +17,7 @@ public class UnitDiscountRule {
     }
   }
 
-  public UnitDiscountRule(int discountFor, BigDecimal discountedPrice) {
+  public DiscountRule(int discountFor, BigDecimal discountedPrice) {
     this.discountFor = discountFor;
     this.discountedPrice = discountedPrice;
   }

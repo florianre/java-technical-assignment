@@ -2,7 +2,7 @@ package kata.supermarket.checkout;
 
 import kata.supermarket.Item;
 import kata.supermarket.discount.DiscountManager;
-import kata.supermarket.discount.UnitDiscountRule;
+import kata.supermarket.discount.DiscountRule;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -17,7 +17,7 @@ public class Basket {
         this.discountManager = new DiscountManager();
     }
 
-    public void addDiscount(String id, UnitDiscountRule discount) {
+    public void addDiscount(String id, DiscountRule discount) {
         discountManager.addDiscount(id, discount);
     }
 
