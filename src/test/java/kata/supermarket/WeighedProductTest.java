@@ -15,7 +15,7 @@ class WeighedProductTest {
     @MethodSource
     void itemFromWeighedProductHasExpectedUnitPrice(String pricePerKilo, String weightInKilos, String expectedPrice) {
         final WeighedProduct weighedProduct = new WeighedProduct(new BigDecimal(pricePerKilo));
-        final Item weighedItem = weighedProduct.weighing(new BigDecimal(weightInKilos));
+        final Item weighedItem = weighedProduct.weighing(new BigDecimal(weightInKilos), "id");
         assertEquals(new BigDecimal(expectedPrice), weighedItem.price());
     }
 
