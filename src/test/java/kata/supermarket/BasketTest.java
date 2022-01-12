@@ -16,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class BasketTest {
 
     private static final String SWEETS = "sweets";
-    public static final String DIGESTIVES = "digestives";
+    private static final String DIGESTIVES = "digestives";
+    private static final String PICK_AND_MIX = "pick-and-mix";
 
     @DisplayName("basket provides its total value when containing...")
     @MethodSource
@@ -33,10 +34,18 @@ class BasketTest {
                 noItems(),
                 aSingleItemPricedPerUnit(),
                 twoOfTheSameItemForThePriceOfOne(),
+                fourHundredGramsOfPickAndMixOfItemForHalfPrice(),
                 multipleItemsPricedPerUnit(),
                 aSingleItemPricedByWeight(),
                 multipleItemsPricedByWeight()
         );
+    }
+
+    private static Arguments fourHundredGramsOfPickAndMixOfItemForHalfPrice() {
+        Map<String, DiscountRule> discounts = new HashMap<>();
+        discounts.put(PICK_AND_MIX, new DiscountRule(0.4, BigDecimal.valueOf(1.55)));
+        return Arguments.of("400g for the price of 200g", "1.55",
+            Arrays.asList(twoHundredGramsOfPickAndMix(), twoHundredGramsOfPickAndMix()), discounts);
     }
 
     private static Arguments twoOfTheSameItemForThePriceOfOne() {
@@ -91,6 +100,6 @@ class BasketTest {
     }
 
     private static Item twoHundredGramsOfPickAndMix() {
-        return aKiloOfPickAndMix().weighing(new BigDecimal(".2"), "pick-and-mix");
+        return aKiloOfPickAndMix().weighing(new BigDecimal(".2"), PICK_AND_MIX);
     }
 }

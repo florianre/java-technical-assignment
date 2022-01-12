@@ -17,7 +17,7 @@ public class DiscountRule {
     }
   }
 
-  public DiscountRule(int discountFor, BigDecimal discountedPrice) {
+  public DiscountRule(double discountFor, BigDecimal discountedPrice) {
     this.discountFor = discountFor;
     this.discountedPrice = discountedPrice;
   }
