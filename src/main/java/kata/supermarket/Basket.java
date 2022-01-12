@@ -16,8 +16,8 @@ public class Basket {
         this.discountManager = new DiscountManager();
     }
 
-    public void addDiscount(UnitDiscountRule discount) {
-        discountManager.addDiscount(discount);
+    public void addDiscount(String id, UnitDiscountRule discount) {
+        discountManager.addDiscount(id, discount);
     }
 
     public void add(final Item item) {
@@ -54,13 +54,19 @@ public class Basket {
          *  which provides that functionality.
          */
         private BigDecimal discounts() {
-            Map<Item, Integer> groupedItems = new HashMap<>();
+            Map<String, Integer> groupedItems = new HashMap<>();
             items.forEach(i -> {
                 int count = groupedItems.getOrDefault(i.getId(), 0) + 1;
-                groupedItems.put(i, count);
+                groupedItems.put(i.getId(), count);
             });
 
-            return BigDecimal.ZERO;
+            BigDecimal newPrice = BigDecimal.ZERO;
+            for (Map.Entry<String, Integer> entry : groupedItems.entrySet()) {
+                String id = entry.getKey();
+                Integer count = entry.getValue();
+                newPrice = newPrice.add(discountManager.applyDiscount(id, count));
+            }
+            return newPrice;
         }
 
         private BigDecimal calculate() {

@@ -7,22 +7,23 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
+import java.util.*;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BasketTest {
 
+    private static final String SWEETS = "sweets";
+    public static final String DIGESTIVES = "digestives";
+
     @DisplayName("basket provides its total value when containing...")
     @MethodSource
     @ParameterizedTest(name = "{0}")
-    void basketProvidesTotalValue(String description, String expectedTotal, Iterable<Item> items, Iterable<UnitDiscountRule> discounts) {
+    void basketProvidesTotalValue(String description, String expectedTotal, Iterable<Item> items, Map<String, UnitDiscountRule> discounts) {
         final Basket basket = new Basket();
         items.forEach(basket::add);
-        discounts.forEach(basket::addDiscount);
+        discounts.forEach((id, discount) -> basket.addDiscount(id, discount));
         assertEquals(new BigDecimal(expectedTotal), basket.total());
     }
 
@@ -38,31 +39,34 @@ class BasketTest {
     }
 
     private static Arguments twoOfTheSameItemForThePriceOfOne() {
+        Map<String, UnitDiscountRule> discounts = new HashMap<>();
+        discounts.put(DIGESTIVES, new UnitDiscountRule(2, BigDecimal.valueOf(1.55)));
         return Arguments.of("two of the same item for the price of one", "1.55",
-            Arrays.asList(aPackOfDigestives(), aPackOfDigestives()), new ArrayList<>());
+            Arrays.asList(aPackOfDigestives(), aPackOfDigestives()), discounts);
     }
 
     private static Arguments aSingleItemPricedByWeight() {
-        return Arguments.of("a single weighed item", "1.25", Collections.singleton(twoFiftyGramsOfAmericanSweets()), new ArrayList<>());
+        return Arguments.of("a single weighed item", "1.25", Collections.singleton(twoFiftyGramsOfAmericanSweets()),
+            new HashMap<>());
     }
 
     private static Arguments multipleItemsPricedByWeight() {
         return Arguments.of("multiple weighed items", "1.85",
-                Arrays.asList(twoFiftyGramsOfAmericanSweets(), twoHundredGramsOfPickAndMix()), new ArrayList<>()
+                Arrays.asList(twoFiftyGramsOfAmericanSweets(), twoHundredGramsOfPickAndMix()), new HashMap<>()
         );
     }
 
     private static Arguments multipleItemsPricedPerUnit() {
         return Arguments.of("multiple items priced per unit", "2.04",
-                Arrays.asList(aPackOfDigestives(), aPintOfMilk()), new ArrayList<>());
+                Arrays.asList(aPackOfDigestives(), aPintOfMilk()), new HashMap<>());
     }
 
     private static Arguments aSingleItemPricedPerUnit() {
-        return Arguments.of("a single item priced per unit", "0.49", Collections.singleton(aPintOfMilk()), new ArrayList<>());
+        return Arguments.of("a single item priced per unit", "0.49", Collections.singleton(aPintOfMilk()), new HashMap<>());
     }
 
     private static Arguments noItems() {
-        return Arguments.of("no items", "0.00", Collections.emptyList(), new ArrayList<>());
+        return Arguments.of("no items", "0.00", Collections.emptyList(), new HashMap<>());
     }
 
     private static Item aPintOfMilk() {
@@ -70,7 +74,7 @@ class BasketTest {
     }
 
     private static Item aPackOfDigestives() {
-        return new Product(new BigDecimal("1.55")).oneOf("digestives");
+        return new Product(new BigDecimal("1.55")).oneOf(DIGESTIVES);
     }
 
     private static WeighedProduct aKiloOfAmericanSweets() {
@@ -78,7 +82,7 @@ class BasketTest {
     }
 
     private static Item twoFiftyGramsOfAmericanSweets() {
-        return aKiloOfAmericanSweets().weighing(new BigDecimal(".25"), "sweets");
+        return aKiloOfAmericanSweets().weighing(new BigDecimal(".25"), SWEETS);
     }
 
     private static WeighedProduct aKiloOfPickAndMix() {
