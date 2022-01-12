@@ -1,16 +1,23 @@
 package kata.supermarket;
 
+import kata.supermarket.discount.DiscountManager;
+import kata.supermarket.discount.UnitDiscountRule;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class Basket {
     private final List<Item> items;
+    private final DiscountManager discountManager;
 
     public Basket() {
         this.items = new ArrayList<>();
+        this.discountManager = new DiscountManager();
+    }
+
+    public void addDiscount(UnitDiscountRule discount) {
+        discountManager.addDiscount(discount);
     }
 
     public void add(final Item item) {
@@ -47,6 +54,12 @@ public class Basket {
          *  which provides that functionality.
          */
         private BigDecimal discounts() {
+            Map<Item, Integer> groupedItems = new HashMap<>();
+            items.forEach(i -> {
+                int count = groupedItems.getOrDefault(i.getId(), 0) + 1;
+                groupedItems.put(i, count);
+            });
+
             return BigDecimal.ZERO;
         }
 
