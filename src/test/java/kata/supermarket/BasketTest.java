@@ -27,10 +27,16 @@ class BasketTest {
         return Stream.of(
                 noItems(),
                 aSingleItemPricedPerUnit(),
+                twoOfTheSameItemForThePriceOfOne(),
                 multipleItemsPricedPerUnit(),
                 aSingleItemPricedByWeight(),
                 multipleItemsPricedByWeight()
         );
+    }
+
+    private static Arguments twoOfTheSameItemForThePriceOfOne() {
+        return Arguments.of("two of the same item for the price of one", "1.55",
+            Arrays.asList(aPackOfDigestives(), aPackOfDigestives()));
     }
 
     private static Arguments aSingleItemPricedByWeight() {
