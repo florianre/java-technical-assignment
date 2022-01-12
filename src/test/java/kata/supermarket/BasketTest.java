@@ -1,5 +1,6 @@
 package kata.supermarket;
 
+import kata.supermarket.checkout.Basket;
 import kata.supermarket.discount.UnitDiscountRule;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;

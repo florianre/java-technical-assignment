@@ -1,5 +1,6 @@
-package kata.supermarket;
+package kata.supermarket.checkout;
 
+import kata.supermarket.Item;
 import kata.supermarket.discount.DiscountManager;
 import kata.supermarket.discount.UnitDiscountRule;
 
@@ -24,7 +25,7 @@ public class Basket {
         this.items.add(item);
     }
 
-    List<Item> items() {
+    public List<Item> items() {
         return Collections.unmodifiableList(items);
     }
 
